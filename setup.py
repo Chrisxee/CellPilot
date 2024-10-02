@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="samhi",
+    name="cellpilot",
     version="1.0",
-    packages=["samhi/"] + find_packages(),
+    packages=["cellpilot/"] + find_packages(),
     url="",
     author="Philipp Endres",
     include_package_data=True,

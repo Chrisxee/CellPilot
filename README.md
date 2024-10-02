@@ -27,13 +27,23 @@ This repository contains the code of CellPilot, a deep learning-based method for
     pip install -e .
     cd ..
     cd ..
+    pip install git+https://github.com/facebookresearch/segment-anything.git
+    pip install schedulefree
+    pip install slideio
+    pip install scikit-image
+    pip install albumentations
+    pip install monai
+    pip install wandb
+    pip install einops
+    pip install gradio-image-prompter
+    pip install gradio
+
     ```
 4. Install our package: 
     ```
     pip install -e .
     ```
-5.  - For inference: Download the weights of the CellPilot model and the CellViT model: [CellPilot](https://1drv.ms/u/c/696e40c0eaa91ac3/EfwN6MP4IqpHityPWHnHkkgBh5MyZEdYGVf9soXDs0gKOg?e=M8DVNQ), [CellViT](https://drive.google.com/uc?export=download&id=1tVYAapUo1Xt8QgCN22Ne1urbbCZkah8q)
-    - For training: Download the weights of the SAM model: [SAM](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth)
+5.  - For inference and training: Download the weights of the CellPilot model and the CellViT model: [CellPilot](https://1drv.ms/u/c/696e40c0eaa91ac3/EfwN6MP4IqpHityPWHnHkkgBh5MyZEdYGVf9soXDs0gKOg?e=M8DVNQ), [CellViT](https://drive.google.com/uc?export=download&id=1tVYAapUo1Xt8QgCN22Ne1urbbCZkah8q), [SAM](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth)
     - For model comparisons: Download the weights of the SimpleClick and the MedSAM model: [SimpleClick](https://drive.google.com/file/d/1dLAEFXhnk_Nebq3Net11sf6MjRCBEe0O/view?usp=drive_link), [MedSAM](https://drive.google.com/file/d/1UAmWL88roYR7wKlnApw5Bcuzf2iQgk6_/view?usp=drive_link)
 
 ## Usage
@@ -44,7 +54,7 @@ python app.py --model_dir <model_dir> --model_name <model_name> --cellvit_model 
 ```
 The app has the following arguments:
 - **model_dir**: The directory where the CellPilot and the CellViT model are stored.
-- **model_name**: The name of the CellPilot model.
+- **model_name**: The name of the CellPilot model. (append .ckpt)
 - **cellvit_model**: The name of the CellViT model.
 
 The command above will generate a link to a webapplication where you can upload your own images and segment them with SAMHI.
