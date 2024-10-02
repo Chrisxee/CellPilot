@@ -1,0 +1,6 @@
+[submodule "resources/SimpleClick"]
+	path = resources/SimpleClick
+	url = https://github.com/philippendres/SimpleClick.git
+[submodule "resources/CellViT"]
+	path = resources/CellViT
+	url = https://github.com/philippendres/CellViT.git
