@@ -24,8 +24,9 @@ class Inference:
         self.model_name = config["model_name"]
 
     def initialize_model(self):
-        model_path = os.path.join(self.model_dir, self.model_name + ".ckpt")
+        model_path = os.path.join(self.model_dir, self.model_name)
         if not Path(model_path).is_file():
+            print("Downloading model from wandb")
             api = wandb.Api()
             artifact = api.artifact("philippresearch/SAMHI/" + self.model_name, type="model")
             artifact_dir = artifact.download(root=self.model_dir)
@@ -40,7 +41,8 @@ class Inference:
         self.predictor = SamHIPredictor(model.model, p_tuning=model.p_tuning)
 
     def initialize_cellvit(self, model_name="CellViT-256-x40.pth"):
-        checkpoint = torch.load(self.model_dir + model_name)
+        model_path = os.path.join(self.model_dir, model_name)
+        checkpoint = torch.load(model_path)
         config = checkpoint['config']
         model = CellViT256(model256_path=None,
                 num_nuclei_classes=config["data.num_nuclei_classes"],

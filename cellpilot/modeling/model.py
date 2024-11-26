@@ -8,13 +8,15 @@ import torch
 import numpy as np
 import wandb
 from monai.metrics import compute_iou, compute_dice
+import os
 
 class SamHI (LoRA_Sam):
     def __init__(self, config):
         self.config = config
         self.model_config = config["model_config"]
         self.load_config()
-        super().__init__(sam_model_registry[self.model_type](checkpoint=self.model_dir + self.base_model), self.lora_rank, self.lora_layer, self.p_tuning)
+        model_path = os.path.join(self.model_dir, self.base_model)
+        super().__init__(sam_model_registry[self.model_type](checkpoint=model_path), self.lora_rank, self.lora_layer, self.p_tuning)
         self.model = self.sam
         if self.model_mode == "train":
             self.training_config = config["training_config"]
