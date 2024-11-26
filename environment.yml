@@ -1,4 +1,4 @@
-name: test
+name: histo3.10
 channels:
   - pytorch
   - nvidia
@@ -293,4 +293,4 @@ dependencies:
       - uvicorn==0.32.1
       - wandb==0.18.7
       - websockets==12.0
-prefix: /vol/data/miniconda3/envs/test
+prefix: /vol/data/miniconda3/envs/histo3.10

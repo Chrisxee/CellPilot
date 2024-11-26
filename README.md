@@ -27,17 +27,6 @@ This repository contains the code of CellPilot, a deep learning-based method for
     pip install -e .
     cd ..
     cd ..
-    pip install git+https://github.com/facebookresearch/segment-anything.git
-    pip install schedulefree
-    pip install slideio
-    pip install scikit-image
-    pip install albumentations
-    pip install monai
-    pip install wandb
-    pip install einops
-    pip install gradio-image-prompter
-    pip install gradio
-
     ```
 4. Install our package: 
     ```
@@ -50,7 +39,7 @@ This repository contains the code of CellPilot, a deep learning-based method for
 ### App
 Run the gradio webapplication with the following command:
 ```
-python app.py --model_dir <model_dir> --model_name <model_name> --cellvit_model <cellvit_model>
+python scripts/app.py --model_dir <model_dir> --model_name <model_name> --cellvit_model <cellvit_model>
 ```
 The app has the following arguments:
 - **model_dir**: The directory where the CellPilot and the CellViT model are stored.
