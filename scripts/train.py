@@ -13,35 +13,53 @@ time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 # Define arguments
 parser = argparse.ArgumentParser()
 
-parser.add_argument("--cluster", type=str, choices=["denbi", "helmholtz", "custom"], default="denbi")
-parser.add_argument("--num_workers", type=int, default=5)
+parser.add_argument("--cluster", type=str, choices=["denbi", "helmholtz", "custom"], default="denbi",
+                    help="The cluster you are using. This is only relevant for the data directory.")
+parser.add_argument("--num_workers", type=int, default=5,
+                    help="The number of workers for the dataloader.")
 
 # W&B parameters
-parser.add_argument("--project_name", type=str, default="SAMHI")
-parser.add_argument("--entity", type=str, default="philippresearch")
+parser.add_argument("--project_name", type=str, default="SAMHI",
+                    help="The name of the project in W&B.")
+parser.add_argument("--entity", type=str, default="philippresearch",
+                    help="The entity in W&B.")
 
 # Model Info
-parser.add_argument("--model_type", type=str, choices=["vit_b", "vit_l", "vit_h"], default="vit_b")
-parser.add_argument("--model_dir", type=str, default="/vol/data/models/")  
-parser.add_argument("--base_model", type=str, default="sam_vit_b_01ec64.pth")
-parser.add_argument("--loss", type=str, choices=["diceCE", "diceFocal", "dice", "generalized_dice", "generalized_diceFocal", "tversky"], default="diceCE")
-parser.add_argument("--compile_model", type=bool, default=False)
-parser.add_argument("--save_model", type=bool, default=False)
-parser.add_argument("--resume_training", type=bool, default=False)
-parser.add_argument("--resume_ckpt", type=str, default="model-czpfnbsk:v0")
+parser.add_argument("--model_type", type=str, choices=["vit_b", "vit_l", "vit_h"], default="vit_b",
+                    help="The type of model you are using.")
+parser.add_argument("--model_dir", type=str, default="/vol/data/models/",
+                    help="The directory where the models are saved.")  
+parser.add_argument("--base_model", type=str, default="sam_vit_b_01ec64.pth",
+                    help="The path to the base model.")
+parser.add_argument("--loss", type=str, choices=["diceCE", "diceFocal", "dice", "generalized_dice", "generalized_diceFocal", "tversky"], default="diceCE",
+                    help="The loss function you are using.")
+parser.add_argument("--compile_model", type=bool, default=False,
+                    help="Whether to compile the model.")
+parser.add_argument("--save_model", type=bool, default=True,
+                    help="Whether to save the model.")
+parser.add_argument("--resume_training", type=bool, default=False,
+                    help="Whether to resume training.")
+parser.add_argument("--resume_ckpt", type=str, default="model-czpfnbsk:v0",
+                    help="The checkpoint to resume training from.")
 
 # Finetuning approach
-parser.add_argument("--freeze", nargs='+', choices=["prompt", "mask", "image", ""], default=["prompt", "image"])
-parser.add_argument("--image_encoder_size", type=int, default=1024)
-parser.add_argument("--p_tuning", type=bool, default=False)
+parser.add_argument("--freeze", nargs='+', choices=["prompt", "mask", "image", ""], default=[""],
+                    help="The layers to freeze.")
+parser.add_argument("--image_encoder_size", type=int, default=1024,
+                    help="The size of the image encoder.")
+parser.add_argument("--p_tuning", type=bool, default=False,
+                    help="Whether to use prompt tuning.")
 
 # Dataset type and location
 datasets = ["BCSS", "CAMELYON", "CellSeg", "CoCaHis", "CoNIC", "CPM", "CRAG", "CryoNuSeg", "GlaS", "ICIA2018",
             "Janowczyk", "KPI", "Kumar", "MoNuSAC", "MoNuSeg", "NuClick", "PAIP2023", "PanNuke", "SegPath", "SegPC",
             "TIGER", "TNBC", "WSSS4LUAD"]
-parser.add_argument("--datasets", nargs='+', choices=datasets, default=["Janowczyk"])
-parser.add_argument("--use_holdout_testset", type=bool, default=False)
-parser.add_argument("--test_datasets", nargs='+', choices=datasets, default=["CPM"])
+parser.add_argument("--datasets", nargs='+', choices=datasets, default=["Janowczyk"],
+                    help="The datasets you are using for training.")
+parser.add_argument("--use_holdout_testset", type=bool, default=True,
+                    help="Whether to use a holdout testset.")
+parser.add_argument("--test_datasets", nargs='+', choices=datasets, default=["CPM"],
+                    help="The datasets you are using for testing.")
 parser.add_argument("--data_directory", type=str, default="/vol/data/histo_datasets/")
 augmentations = ["AdvancedBlur", "Blur", "GaussianBlur", "ZoomBlur", "CLAHE", "Emboss", "GaussNoise", "IsoNoise",
                 "ImageCompression", "Posterize", "RingingOvershoot", "Sharpen", "ToGray", "Downscale",
@@ -52,21 +70,33 @@ augmentations = ["AdvancedBlur", "Blur", "GaussianBlur", "ZoomBlur", "CLAHE", "E
                 "RandomCrop", "RandomGridShuffle", "RandomResizedCrop", "RandomResizedCrop", "Rotate",
                 "ShiftScaleRotate", "CropAndPad", "D4", "PadIfNeeded", "Perspective", "RandomScale",
                 "NoOp"]
-parser.add_argument("--data_augmentations", nargs='+', default=["NoOp"])
-parser.add_argument("--mask_augmentation_tries", type=int, default=5)
+parser.add_argument("--data_augmentations", nargs='+', default=["RandomResizedCrop", "HueSaturationValue", "D4"],
+                    help="The data augmentations you are using.")
+parser.add_argument("--mask_augmentation_tries", type=int, default=5,
+                    help="The number of tries for mask augmentation.")
 
-parser.add_argument("--threshold_connected_components", type=int, default=2)
+parser.add_argument("--threshold_connected_components", type=int, default=2,
+                    help="The threshold for connected components.")
 
 #Training parameters
-parser.add_argument("--lr", type=float, default=1e-5)
-parser.add_argument("--epochs", type=int, default=10)
-parser.add_argument("--batch_size", type=int, default=4)
-parser.add_argument("--accumulate_grad_batches", type=int, default=1)
-parser.add_argument("--shuffle", type=bool, default=False)
-parser.add_argument('--seed', type=int, default=1)
-parser.add_argument("--mask_threshold", type=float, default=0.0)
-parser.add_argument("--bbox_shift", type=int, default=10)
-parser.add_argument("--run_directory", type=str, default="/vol/data/runs/")
+parser.add_argument("--lr", type=float, default=1e-5,
+                    help="The learning rate.")
+parser.add_argument("--epochs", type=int, default=20,
+                    help="The number of epochs.")
+parser.add_argument("--batch_size", type=int, default=4,
+                    help="The batch size.")
+parser.add_argument("--accumulate_grad_batches", type=int, default=4,
+                    help="The number of batches to accumulate gradients over.")
+parser.add_argument("--shuffle", type=bool, default=True,
+                    help="Whether to shuffle the data.")
+parser.add_argument('--seed', type=int, default=1,
+                    help="The seed for the random number generator.")
+parser.add_argument("--mask_threshold", type=float, default=0.0,
+                    help="The threshold for the mask.")
+parser.add_argument("--bbox_shift", type=int, default=10,
+                    help="The shift for the bounding box.")
+parser.add_argument("--run_directory", type=str, default="/vol/data/runs/",
+                    help="The directory where the runs are saved.")
 
 # Prompt parameters
 parser.add_argument("--random_prompt_type", type=bool, default=False)
@@ -83,14 +113,14 @@ parser.add_argument("--test_split", type=float, default=0.2)
 parser.add_argument("--drop_last", type=bool, default=True)
 
 # LoRA parameters
-parser.add_argument("--lora_rank", type=int, default=1)
+parser.add_argument("--lora_rank", type=int, default=4)
 parser.add_argument("--lora_layer", nargs='+', default=None) #["-1"]
 
 # Interactive parameters
 parser.add_argument("--random_mode", type=bool, default=False)
 parser.add_argument("--mode", type=str, choices=["random", "interactive"], default="interactive")
-parser.add_argument("--random_nr_of_interactive_points", type=bool, default=False)
-parser.add_argument("--max_nr_of_interactive_points", type=int, default=1)
+parser.add_argument("--random_nr_of_interactive_points", type=bool, default=True)
+parser.add_argument("--max_nr_of_interactive_points", type=int, default=5)
 parser.add_argument("--nr_of_interactive_points", type=int, default=0)
 
 # Point parameters
@@ -99,7 +129,7 @@ parser.add_argument("--max_nr_of_points", type=int, default=1)
 parser.add_argument("--nr_of_initial_points", type=int, default=1)
 
 # Positive point parameters
-parser.add_argument("--only_positive_points", type=bool, default=False)
+parser.add_argument("--only_positive_points", type=bool, default=True)
 parser.add_argument("--random_nr_of_positive_points", type=bool, default=False)
 parser.add_argument("--max_nr_of_positive_points", type=int, default=1)
 parser.add_argument("--nr_of_initial_positive_points", type=int, default=1)

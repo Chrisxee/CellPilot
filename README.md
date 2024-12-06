@@ -1,6 +1,9 @@
 # CellPilot
 This repository contains the code of CellPilot, a deep learning-based method for the automatic and interactive segmentation of cells and glands in histological images. CellPilot uses [SAM](https://arxiv.org/abs/2304.02643) and [CellViT](https://arxiv.org/abs/2306.15350) and is fine-tuned on large-scale segmentation datasets of histological images.
-![Model](./images/model.png)
+A Preprint of the CellPilot paper is available on [Arxiv](https://arxiv.org/abs/2411.15514).
+The model architecture is shown below:
+![Model](./images/model.png).
+
 
 ## Key Features
 - **Automatic Segmentation**: CellPilot allows users to automatically segment cells in histological images.
@@ -57,6 +60,53 @@ The app has the following features:
 - **Remove Mask**: Remove an existing mask by clicking on it.
 - **Move the Image**: Move the image with the arrow symbols.
 - **Zoom the Image**: Zoom the image with the zoom bar.
+
+### Inference
+For code-based inference with CellPilot, have a look at the [automatic segmentation](./notebooks/automatic.ipynb) and [interactive segmentation](./notebooks/interactive.ipynb) notebooks.
+
+### Training
+For training the CellPilot model, you first need to process the data. Have a look at the [data processing](./cellpilot/data_processing/data_processing.md) for more information.
+Then you can train the CellPilot model with the following command and log your results on [Weights & Biases (W&B)](https://wandb.ai/):
+```
+python scripts/train.py --project_name <project_name> --entity <entity> --run_directory <run_directory> --model_dir <model_dir> --display_name <display_name> --datasets <training datasets> --test_datasets <test datasets> --cluster <cluster>
+```
+The training script has the following arguments:
+- **project_name**: The name of the project on W&B.
+- **entity**: The name of the entity on W&B.
+- **run_directory**: The directory where the training runs are stored.
+- **model_dir**: The directory where the CellPilot and the SAM model are stored.
+- **display_name**: The name of the display on W&B.
+- **datasets**: The training datasets named according to [data_processing.md](./cellpilot/data_processing/data_processing.md).
+- **test_datasets**: The test datasets named according to [data_processing.md](./cellpilot/data_processing/data_processing.md).
+- **cluster**: cluster to run the training on. For your own computer set this to custom and follow the instructions on [data_processing.md](./cellpilot/data_processing/data_processing.md). If you are working at Helmholtz and have access to the cluster set this to helmholtz.
+You can modify all these parameters to fit your needs. Have a look at the [training](./scripts/train.py) script for more information.
+## Code Structure
+### Overview
+The codebase is organized as follows:
+
+- `cellpilot/`: Contains the data processing, model definitions and inference code .
+- `notebooks/`: Contains examplenotebooks for automatic and interactive segmentation
+- `resources/`: Includes necessary resources and submodules like CellViT and SimpleClick.
+- `scripts/`: Contains the main scripts for running the application and training the models.
+- `utils/`: Utility functions that assist in data preprocessing.
+
+
+
+
+## Citation
+If you use CellPilot in your research, please cite our paper:
+```bibtex
+@misc{endres2024cellpilotunifiedapproachautomatic,
+    title={CellPilot: A unified approach to automatic and interactive segmentation in 
+    histopathology}, 
+    author={Philipp Endres and Valentin Koch and Julia A. Schnabel and Carsten Marr},
+    year={2024},
+    eprint={2411.15514},
+    archivePrefix={arXiv},
+    primaryClass={cs.CV},
+    url={https://arxiv.org/abs/2411.15514}, 
+}
+```
 
 <!-- ### Training
 Check that the data is stored in the structure given in [data_processing.md](./samhi/data_processing/data_processing.md)
