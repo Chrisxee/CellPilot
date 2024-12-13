@@ -62,6 +62,6 @@ dependencies:
   - typing-extensions
   - urllib3
   - zipp
-  - mkl (optional for macOS, as macOS uses Apple Accelerate by default; remove if not needed)
+  - mkl
   - pip:
       - openslide-python
